@@ -1,25 +1,19 @@
 version: 1.0.{build}
 
 image:
-  build: Windows
+  build: Ubuntu2204
 
 init:
-  - ps: Write-Host "Starting AppVeyor worker image build..."
+  - sh: echo "Starting Linux AppVeyor worker image build..."
 
 install:
-  # Install .NET 10 Preview
-  - ps: |
-      $dotnetUrl = "https://download.visualstudio.microsoft.com/download/pr/7d775d6d-55b4-4243-9ef9-135e8e5a7231/aa0c64e2d5b8f682bb6ca8f9f340b62b/dotnet-sdk-10.0.100-preview.1-win-x64.exe"
-      Invoke-WebRequest $dotnetUrl -OutFile "dotnet10.exe"
-      Start-Process .\dotnet10.exe -ArgumentList "/quiet","/norestart" -Wait
-
-  # Verify installation
-  - ps: dotnet --info
+  - sh: chmod +x ./scripts/install.sh
+  - sh: ./scripts/install.sh
 
 build: off
 test: off
 
 image_build:
   provider: appveyor
-  name: "dotnet10-custom"
-  description: ".NET 10 preview image based on AppVeyor Windows worker"
+  name: "dotnet10-linux"
+  description: "Custom AppVeyor Linux image with latest .NET 10 SDK"
